@@ -19,16 +19,6 @@
       "page": 2,
       "hotspots": [
         {
-          "x": 44.03,
-          "y": 51.74,
-          "width": 41.68,
-          "height": 25.89,
-          "label": "الخلية النباتية",
-          "title": "الخلية النباتية",
-          "description": "",
-          "model": "models/cell2.glb"
-        },
-        {
           "x": 17.64,
           "y": 70.16,
           "width": 22.3,
@@ -37,6 +27,21 @@
           "title": "الخليه بدائيه النواة",
           "description": "",
           "model": "models/cell3.glb"
+        }
+      ]
+    },
+    {
+      "page": 3,
+      "hotspots": [
+        {
+          "x": 10.84,
+          "y": 19.84,
+          "width": 29.32,
+          "height": 20.05,
+          "label": "تراكيب الخليه",
+          "title": "تراكيب الخليه",
+          "description": "",
+          "model": "models/cell2"
         }
       ]
     }
