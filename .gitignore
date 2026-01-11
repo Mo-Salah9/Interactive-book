@@ -2,7 +2,7 @@
 node_modules/
 
 # PDF files (can be large)
-*.pdf
+
 
 # 3D model files (can be large)
 models/*.glb
