@@ -183,17 +183,18 @@ function openModelViewer(hotspot) {
     }
 
     // Configure AR placement and scaling
-    // ar-scale="fixed" prevents the model from scaling too large
     // ar-placement="floor" ensures surface detection happens first
+    // ar-scale="auto" allows user to scale in AR mode
     modelViewer.setAttribute('ar-placement', 'floor');
-    modelViewer.setAttribute('ar-scale', 'fixed');
+    modelViewer.setAttribute('ar-scale', 'auto');
 
-    // Set custom scale if provided in config, otherwise use a reasonable default
+    // Set custom scale if provided in config, otherwise use a very small default
+    // Models are often exported in large units (like cm instead of m)
     if (hotspot.scale) {
         modelViewer.setAttribute('scale', hotspot.scale);
     } else {
-        // Default scale to prevent models from appearing too large
-        modelViewer.setAttribute('scale', '0.5 0.5 0.5');
+        // Very small default scale (1% of original) to prevent huge models
+        modelViewer.setAttribute('scale', '0.01 0.01 0.01');
     }
 
     // Set title and description
