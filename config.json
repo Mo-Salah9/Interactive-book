@@ -11,7 +11,7 @@
           "label": "إضغط هنا ",
           "title": "هذه هي الخليه الحيوانيه ",
           "description": "هذه هي الخليه الحيوانيه ",
-          "model": "models/animal_cell_-_downloadable.pdf"
+          "model": "models/animal_cell_-_downloadable.glb"
         }
       ]
     }
