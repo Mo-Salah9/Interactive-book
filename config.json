@@ -4,13 +4,13 @@
       "page": 1,
       "hotspots": [
         {
-          "x": 22.98,
-          "y": 46.71,
-          "width": 61.36,
-          "height": 35.71,
-          "label": "click here ",
-          "title": "3d",
-          "description": "click",
+          "x": 7.07,
+          "y": 66.02,
+          "width": 36.54,
+          "height": 23.3,
+          "label": "إضغط هنا",
+          "title": "خليه حيوانيه ",
+          "description": "هذه هي الخليه الحيوانيه ",
           "model": "models/animal_cell_-_downloadable.glb"
         }
       ]
