@@ -11,7 +11,7 @@
           "label": "الخلية الحيوانيه",
           "title": "الخلية الحيوانيه",
           "description": "",
-          "model": "cell sesction.glb"
+          "model": "cell.glb"
         }
       ]
     },
@@ -26,7 +26,7 @@
           "label": "الخلية النباتية",
           "title": "الخلية النباتية",
           "description": "",
-          "model": "plant_cell__biology.glb"
+          "model": "cell2.glb"
         },
         {
           "x": 17.64,
@@ -36,7 +36,7 @@
           "label": "الخليه بدائيه النواة",
           "title": "الخليه بدائيه النواة",
           "description": "",
-          "model": "bacterial_cell_model.glb"
+          "model": "cell3.glb"
         }
       ]
     }
