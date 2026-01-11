@@ -4,14 +4,39 @@
       "page": 1,
       "hotspots": [
         {
-          "x": 5.6,
-          "y": 64.48,
-          "width": 38.74,
-          "height": 26.06,
-          "label": "إضغط هنا ",
-          "title": "هذه هي الخليه الحيوانيه ",
-          "description": "هذه هي الخليه الحيوانيه ",
-          "model": "models/animal_cell_-_downloadable.glb"
+          "x": 8.12,
+          "y": 64.4,
+          "width": 36.34,
+          "height": 24.03,
+          "label": "الخلية الحيوانيه",
+          "title": "الخلية الحيوانيه",
+          "description": "",
+          "model": "cell sesction.glb"
+        }
+      ]
+    },
+    {
+      "page": 2,
+      "hotspots": [
+        {
+          "x": 44.03,
+          "y": 51.74,
+          "width": 41.68,
+          "height": 25.89,
+          "label": "الخلية النباتية",
+          "title": "الخلية النباتية",
+          "description": "",
+          "model": "plant_cell__biology.glb"
+        },
+        {
+          "x": 17.64,
+          "y": 70.16,
+          "width": 22.3,
+          "height": 13.07,
+          "label": "الخليه بدائيه النواة",
+          "title": "الخليه بدائيه النواة",
+          "description": "",
+          "model": "bacterial_cell_model.glb"
         }
       ]
     }
