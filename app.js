@@ -117,16 +117,30 @@ function renderHotspots(pageNum, pageWidth, pageHeight) {
         return;
     }
 
+    // Get canvas position to correctly align hotspots
+    const canvasRect = canvas.getBoundingClientRect();
+    const containerRect = hotspotContainer.parentElement.getBoundingClientRect();
+
+    // Calculate offset from container to canvas
+    const offsetX = canvasRect.left - containerRect.left;
+    const offsetY = canvasRect.top - containerRect.top;
+
+    // Set hotspot container dimensions to match canvas exactly
+    hotspotContainer.style.width = `${canvasRect.width}px`;
+    hotspotContainer.style.height = `${canvasRect.height}px`;
+    hotspotContainer.style.left = `${offsetX}px`;
+    hotspotContainer.style.top = `${offsetY}px`;
+
     // Create hotspot elements
     pageConfig.hotspots.forEach((hotspot, index) => {
         const hotspotEl = document.createElement('div');
         hotspotEl.className = 'hotspot';
 
-        // Calculate position and size based on percentage
-        const left = (hotspot.x / 100) * pageWidth;
-        const top = (hotspot.y / 100) * pageHeight;
-        const width = (hotspot.width / 100) * pageWidth;
-        const height = (hotspot.height / 100) * pageHeight;
+        // Calculate position and size based on percentage relative to canvas
+        const left = (hotspot.x / 100) * canvasRect.width;
+        const top = (hotspot.y / 100) * canvasRect.height;
+        const width = (hotspot.width / 100) * canvasRect.width;
+        const height = (hotspot.height / 100) * canvasRect.height;
 
         hotspotEl.style.left = `${left}px`;
         hotspotEl.style.top = `${top}px`;
@@ -171,6 +185,9 @@ function openModelViewer(hotspot) {
 
     // Show modal
     modal.classList.add('active');
+
+    // Disable interactions with main page content
+    document.body.style.overflow = 'hidden';
 }
 
 // Close modal
@@ -178,6 +195,8 @@ function closeModal() {
     modal.classList.remove('active');
     // Reset model viewer
     modelViewer.removeAttribute('src');
+    // Re-enable page interactions
+    document.body.style.overflow = 'auto';
 }
 
 // Setup event listeners
@@ -207,14 +226,22 @@ function setupEventListeners() {
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
+        // Don't handle navigation keys when modal is open (except Escape to close)
+        if (modal.classList.contains('active')) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            // Prevent other keyboard events from affecting the main page
+            return;
+        }
+
+        // Handle page navigation only when modal is closed
         if (e.key === 'ArrowLeft' && state.currentPage > 1) {
             state.currentPage--;
             renderPage(state.currentPage);
         } else if (e.key === 'ArrowRight' && state.currentPage < state.totalPages) {
             state.currentPage++;
             renderPage(state.currentPage);
-        } else if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
         }
     });
 
