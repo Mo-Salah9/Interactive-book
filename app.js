@@ -183,13 +183,17 @@ function openModelViewer(hotspot) {
     }
 
     // Configure AR placement and scaling
-    // ar-scale="auto" automatically scales the model to fit
-    // ar-placement can be "floor" or "wall"
+    // ar-scale="fixed" prevents the model from scaling too large
+    // ar-placement="floor" ensures surface detection happens first
     modelViewer.setAttribute('ar-placement', 'floor');
+    modelViewer.setAttribute('ar-scale', 'fixed');
 
-    // Set custom scale if provided in config, otherwise use auto
+    // Set custom scale if provided in config, otherwise use a reasonable default
     if (hotspot.scale) {
         modelViewer.setAttribute('scale', hotspot.scale);
+    } else {
+        // Default scale to prevent models from appearing too large
+        modelViewer.setAttribute('scale', '0.5 0.5 0.5');
     }
 
     // Set title and description
