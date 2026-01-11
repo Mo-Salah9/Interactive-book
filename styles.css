@@ -90,8 +90,8 @@ body {
 
 .hotspot {
     position: absolute;
-    border: 3px solid #ff6b6b;
-    background: rgba(255, 107, 107, 0.2);
+    border: 2px solid rgba(255, 107, 107, 0.4);
+    background: rgba(255, 107, 107, 0.05);
     cursor: pointer;
     pointer-events: auto;
     transition: all 0.3s ease;
@@ -99,14 +99,14 @@ body {
 }
 
 .hotspot:hover {
-    background: rgba(255, 107, 107, 0.4);
-    border-color: #ff5252;
+    background: rgba(255, 107, 107, 0.15);
+    border-color: rgba(255, 82, 82, 0.6);
     transform: scale(1.05);
 }
 
 @keyframes pulse {
     0%, 100% {
-        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+        box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.3);
     }
     50% {
         box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
