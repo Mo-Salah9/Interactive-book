@@ -29,21 +29,6 @@
           "model": "models/cell3.glb"
         }
       ]
-    },
-    {
-      "page": 3,
-      "hotspots": [
-        {
-          "x": 10.84,
-          "y": 19.84,
-          "width": 29.32,
-          "height": 20.05,
-          "label": "تراكيب الخليه",
-          "title": "تراكيب الخليه",
-          "description": "",
-          "model": "models/cellx.glb"
-        }
-      ]
     }
   ]
 }
