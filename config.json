@@ -1,0 +1,19 @@
+{
+  "pages": [
+    {
+      "page": 1,
+      "hotspots": [
+        {
+          "x": 22.98,
+          "y": 46.71,
+          "width": 61.36,
+          "height": 35.71,
+          "label": "click here ",
+          "title": "3d",
+          "description": "click",
+          "model": "models/animal_cell_-_downloadable.glb"
+        }
+      ]
+    }
+  ]
+}

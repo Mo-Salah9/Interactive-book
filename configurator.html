@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotspot Configurator - Interactive Book</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h2 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+        }
+
+        .pdf-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .controls button {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls button:hover {
+            background: #5568d3;
+        }
+
+        .controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #pdfViewerContainer {
+            position: relative;
+            display: inline-block;
+            cursor: crosshair;
+        }
+
+        #pdfCanvas {
+            display: block;
+            border: 2px solid #ddd;
+        }
+
+        .selection-box {
+            position: absolute;
+            border: 3px dashed #667eea;
+            background: rgba(102, 126, 234, 0.2);
+            pointer-events: none;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .add-hotspot-btn {
+            width: 100%;
+            padding: 12px;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .add-hotspot-btn:hover {
+            background: #38a169;
+        }
+
+        .hotspot-list {
+            margin-top: 20px;
+        }
+
+        .hotspot-item {
+            background: #f7fafc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .hotspot-item h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .hotspot-item p {
+            color: #666;
+            font-size: 12px;
+            margin: 3px 0;
+        }
+
+        .hotspot-item button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #fc8181;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .config-output {
+            margin-top: 20px;
+        }
+
+        .config-output textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .mode-indicator {
+            padding: 5px 10px;
+            background: #48bb78;
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Interactive Book - Hotspot Configurator</h1>
+
+        <div class="instructions">
+            <h2>How to Use:</h2>
+            <ol>
+                <li>Load your PDF file using the file input below</li>
+                <li>Navigate to the page where you want to add a hotspot</li>
+                <li>Click and drag on the PDF to create a selection box around the area</li>
+                <li>Fill in the hotspot details in the form</li>
+                <li>Click "Add Hotspot" to save it</li>
+                <li>Repeat for all pages and hotspots</li>
+                <li>Copy the generated JSON and paste it into your config.json file</li>
+            </ol>
+        </div>
+
+        <div class="main-content">
+            <div class="pdf-container">
+                <div class="controls">
+                    <input type="file" id="pdfFileInput" accept="application/pdf">
+                    <button id="prevPage">Previous</button>
+                    <span id="pageIndicator">Page 1 of 1</span>
+                    <button id="nextPage">Next</button>
+                    <span class="mode-indicator">Click and drag to select area</span>
+                </div>
+                <div id="pdfViewerContainer">
+                    <canvas id="pdfCanvas"></canvas>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <h2>Hotspot Configuration</h2>
+
+                <div class="form-group">
+                    <label>Selection:</label>
+                    <p id="selectionInfo" style="color: #666; font-size: 12px;">No area selected</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotLabel">Label:</label>
+                    <input type="text" id="hotspotLabel" placeholder="Click to view model">
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotTitle">Title:</label>
+                    <input type="text" id="hotspotTitle" placeholder="3D Model Title">
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotDescription">Description:</label>
+                    <textarea id="hotspotDescription" placeholder="Description of the 3D model"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotModel">Model Path (.glb):</label>
+                    <input type="text" id="hotspotModel" placeholder="models/model1.glb">
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotIosModel">iOS Model Path (.usdz) - Optional:</label>
+                    <input type="text" id="hotspotIosModel" placeholder="models/model1.usdz">
+                </div>
+
+                <div class="form-group">
+                    <label for="hotspotPoster">Poster Image - Optional:</label>
+                    <input type="text" id="hotspotPoster" placeholder="models/poster1.jpg">
+                </div>
+
+                <button class="add-hotspot-btn" id="addHotspotBtn" disabled>Add Hotspot</button>
+
+                <div class="hotspot-list">
+                    <h2>Current Page Hotspots</h2>
+                    <div id="hotspotListContainer"></div>
+                </div>
+
+                <div class="config-output">
+                    <h2>Generated Config</h2>
+                    <textarea id="configOutput" readonly></textarea>
+                    <button class="copy-btn" id="copyConfigBtn">Copy to Clipboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const state = {
+            pdfDoc: null,
+            currentPage: 1,
+            totalPages: 0,
+            scale: 1.5,
+            config: { pages: [] },
+            selection: null,
+            isSelecting: false,
+            startX: 0,
+            startY: 0
+        };
+
+        const canvas = document.getElementById('pdfCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('pdfViewerContainer');
+        const fileInput = document.getElementById('pdfFileInput');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const addHotspotBtn = document.getElementById('addHotspotBtn');
+        const selectionInfo = document.getElementById('selectionInfo');
+        const configOutput = document.getElementById('configOutput');
+        const copyConfigBtn = document.getElementById('copyConfigBtn');
+
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const fileReader = new FileReader();
+                fileReader.onload = async function() {
+                    const typedArray = new Uint8Array(this.result);
+                    await loadPDF(typedArray);
+                    await renderPage(state.currentPage);
+                };
+                fileReader.readAsArrayBuffer(file);
+            }
+        });
+
+        async function loadPDF(data) {
+            const loadingTask = pdfjsLib.getDocument(data);
+            state.pdfDoc = await loadingTask.promise;
+            state.totalPages = state.pdfDoc.numPages;
+        }
+
+        async function renderPage(pageNum) {
+            const page = await state.pdfDoc.getPage(pageNum);
+            const viewport = page.getViewport({ scale: state.scale });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({
+                canvasContext: ctx,
+                viewport: viewport
+            }).promise;
+
+            pageIndicator.textContent = `Page ${pageNum} of ${state.totalPages}`;
+            prevBtn.disabled = pageNum <= 1;
+            nextBtn.disabled = pageNum >= state.totalPages;
+
+            updateHotspotList();
+            updateConfigOutput();
+        }
+
+        // Selection handling
+        container.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            state.startX = e.clientX - rect.left;
+            state.startY = e.clientY - rect.top;
+            state.isSelecting = true;
+
+            const existing = document.querySelector('.selection-box');
+            if (existing) existing.remove();
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!state.isSelecting) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const currentX = e.clientX - rect.left;
+            const currentY = e.clientY - rect.top;
+
+            let existing = document.querySelector('.selection-box');
+            if (!existing) {
+                existing = document.createElement('div');
+                existing.className = 'selection-box';
+                container.appendChild(existing);
+            }
+
+            const left = Math.min(state.startX, currentX);
+            const top = Math.min(state.startY, currentY);
+            const width = Math.abs(currentX - state.startX);
+            const height = Math.abs(currentY - state.startY);
+
+            existing.style.left = left + 'px';
+            existing.style.top = top + 'px';
+            existing.style.width = width + 'px';
+            existing.style.height = height + 'px';
+        });
+
+        container.addEventListener('mouseup', (e) => {
+            if (!state.isSelecting) return;
+            state.isSelecting = false;
+
+            const rect = canvas.getBoundingClientRect();
+            const endX = e.clientX - rect.left;
+            const endY = e.clientY - rect.top;
+
+            const left = Math.min(state.startX, endX);
+            const top = Math.min(state.startY, endY);
+            const width = Math.abs(endX - state.startX);
+            const height = Math.abs(endY - state.startY);
+
+            if (width > 10 && height > 10) {
+                state.selection = {
+                    x: (left / canvas.width * 100).toFixed(2),
+                    y: (top / canvas.height * 100).toFixed(2),
+                    width: (width / canvas.width * 100).toFixed(2),
+                    height: (height / canvas.height * 100).toFixed(2)
+                };
+
+                selectionInfo.textContent = `x: ${state.selection.x}%, y: ${state.selection.y}%, width: ${state.selection.width}%, height: ${state.selection.height}%`;
+                addHotspotBtn.disabled = false;
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (state.currentPage > 1) {
+                state.currentPage--;
+                renderPage(state.currentPage);
+                clearSelection();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (state.currentPage < state.totalPages) {
+                state.currentPage++;
+                renderPage(state.currentPage);
+                clearSelection();
+            }
+        });
+
+        addHotspotBtn.addEventListener('click', () => {
+            if (!state.selection) return;
+
+            const hotspot = {
+                x: parseFloat(state.selection.x),
+                y: parseFloat(state.selection.y),
+                width: parseFloat(state.selection.width),
+                height: parseFloat(state.selection.height),
+                label: document.getElementById('hotspotLabel').value || 'Click here',
+                title: document.getElementById('hotspotTitle').value || '3D Model',
+                description: document.getElementById('hotspotDescription').value || '',
+                model: document.getElementById('hotspotModel').value || 'models/model.glb'
+            };
+
+            const iosModel = document.getElementById('hotspotIosModel').value;
+            const poster = document.getElementById('hotspotPoster').value;
+
+            if (iosModel) hotspot.iosModel = iosModel;
+            if (poster) hotspot.poster = poster;
+
+            let pageConfig = state.config.pages.find(p => p.page === state.currentPage);
+            if (!pageConfig) {
+                pageConfig = { page: state.currentPage, hotspots: [] };
+                state.config.pages.push(pageConfig);
+                state.config.pages.sort((a, b) => a.page - b.page);
+            }
+
+            pageConfig.hotspots.push(hotspot);
+
+            updateHotspotList();
+            updateConfigOutput();
+            clearSelection();
+            clearForm();
+        });
+
+        function clearSelection() {
+            state.selection = null;
+            const existing = document.querySelector('.selection-box');
+            if (existing) existing.remove();
+            selectionInfo.textContent = 'No area selected';
+            addHotspotBtn.disabled = true;
+        }
+
+        function clearForm() {
+            document.getElementById('hotspotLabel').value = '';
+            document.getElementById('hotspotTitle').value = '';
+            document.getElementById('hotspotDescription').value = '';
+            document.getElementById('hotspotModel').value = '';
+            document.getElementById('hotspotIosModel').value = '';
+            document.getElementById('hotspotPoster').value = '';
+        }
+
+        function updateHotspotList() {
+            const container = document.getElementById('hotspotListContainer');
+            const pageConfig = state.config.pages.find(p => p.page === state.currentPage);
+
+            if (!pageConfig || !pageConfig.hotspots.length) {
+                container.innerHTML = '<p style="color: #999; font-size: 12px;">No hotspots on this page</p>';
+                return;
+            }
+
+            container.innerHTML = pageConfig.hotspots.map((hotspot, index) => `
+                <div class="hotspot-item">
+                    <h3>${hotspot.title}</h3>
+                    <p>Position: ${hotspot.x}%, ${hotspot.y}%</p>
+                    <p>Size: ${hotspot.width}% × ${hotspot.height}%</p>
+                    <p>Model: ${hotspot.model}</p>
+                    <button onclick="removeHotspot(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        window.removeHotspot = function(index) {
+            const pageConfig = state.config.pages.find(p => p.page === state.currentPage);
+            if (pageConfig) {
+                pageConfig.hotspots.splice(index, 1);
+                if (pageConfig.hotspots.length === 0) {
+                    state.config.pages = state.config.pages.filter(p => p.page !== state.currentPage);
+                }
+                updateHotspotList();
+                updateConfigOutput();
+            }
+        };
+
+        function updateConfigOutput() {
+            configOutput.value = JSON.stringify(state.config, null, 2);
+        }
+
+        copyConfigBtn.addEventListener('click', () => {
+            configOutput.select();
+            document.execCommand('copy');
+            copyConfigBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyConfigBtn.textContent = 'Copy to Clipboard';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

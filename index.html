@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Book</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Book Navigation -->
+        <div class="navigation">
+            <button id="prevPage" class="nav-btn">← Previous</button>
+            <span id="pageIndicator">Page 1</span>
+            <button id="nextPage" class="nav-btn">Next →</button>
+        </div>
+
+        <!-- PDF Viewer Container -->
+        <div class="book-container">
+            <div id="pdfViewer" class="pdf-viewer">
+                <canvas id="pdfCanvas"></canvas>
+                <div id="hotspotContainer" class="hotspot-container"></div>
+            </div>
+        </div>
+
+        <!-- 3D Model Modal -->
+        <div id="modelModal" class="modal">
+            <div class="modal-content">
+                <button class="close-btn" id="closeModal">&times;</button>
+                <h2 id="modelTitle">3D Model Viewer</h2>
+                <model-viewer
+                    id="modelViewer"
+                    camera-controls
+                    touch-action="pan-y"
+                    auto-rotate
+                    ar
+                    ar-modes="webxr scene-viewer quick-look"
+                    shadow-intensity="1">
+                    <button slot="ar-button" id="ar-button" class="ar-button">
+                        View in AR
+                    </button>
+                </model-viewer>
+                <div class="model-info">
+                    <p id="modelDescription"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

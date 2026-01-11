@@ -1,0 +1,21 @@
+{
+  "name": "interactive-book",
+  "version": "1.0.0",
+  "description": "Interactive PDF book with 3D models and AR support",
+  "scripts": {
+    "start": "http-server -p 8000 -o",
+    "dev": "http-server -p 8000 -o"
+  },
+  "keywords": [
+    "pdf",
+    "interactive",
+    "3d",
+    "ar",
+    "model-viewer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
