@@ -36,7 +36,14 @@
                     auto-rotate
                     ar
                     ar-modes="webxr scene-viewer quick-look"
-                    shadow-intensity="1">
+                    ar-scale="auto"
+                    camera-orbit="0deg 75deg 105%"
+                    min-camera-orbit="auto auto auto"
+                    max-camera-orbit="auto auto auto"
+                    shadow-intensity="1"
+                    shadow-softness="1"
+                    exposure="1"
+                    environment-image="neutral">
                     <button slot="ar-button" id="ar-button" class="ar-button">
                         View in AR
                     </button>

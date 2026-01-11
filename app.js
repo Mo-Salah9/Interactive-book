@@ -182,6 +182,16 @@ function openModelViewer(hotspot) {
         modelViewer.setAttribute('poster', hotspot.poster);
     }
 
+    // Configure AR placement and scaling
+    // ar-scale="auto" automatically scales the model to fit
+    // ar-placement can be "floor" or "wall"
+    modelViewer.setAttribute('ar-placement', 'floor');
+
+    // Set custom scale if provided in config, otherwise use auto
+    if (hotspot.scale) {
+        modelViewer.setAttribute('scale', hotspot.scale);
+    }
+
     // Set title and description
     modelTitle.textContent = hotspot.title || '3D Model Viewer';
     modelDescription.textContent = hotspot.description || '';
