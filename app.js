@@ -98,7 +98,7 @@ async function renderPage(pageNum) {
         nextBtn.disabled = pageNum >= state.totalPages;
 
         // Render hotspots for this page
-        renderHotspots(pageNum, viewport.width, viewport.height);
+        renderHotspots(pageNum);
 
     } catch (error) {
         console.error('Error rendering page:', error);
@@ -106,7 +106,7 @@ async function renderPage(pageNum) {
 }
 
 // Render clickable hotspots on the page
-function renderHotspots(pageNum, pageWidth, pageHeight) {
+function renderHotspots(pageNum) {
     // Clear existing hotspots
     hotspotContainer.innerHTML = '';
 
@@ -117,50 +117,53 @@ function renderHotspots(pageNum, pageWidth, pageHeight) {
         return;
     }
 
-    // Get canvas position to correctly align hotspots
-    const canvasRect = canvas.getBoundingClientRect();
-    const containerRect = hotspotContainer.parentElement.getBoundingClientRect();
+    // Wait for canvas to be fully rendered and positioned
+    requestAnimationFrame(() => {
+        // Get the actual rendered size of the canvas on screen
+        const canvasRect = canvas.getBoundingClientRect();
+        const pdfViewerRect = canvas.parentElement.getBoundingClientRect();
 
-    // Calculate offset from container to canvas
-    const offsetX = canvasRect.left - containerRect.left;
-    const offsetY = canvasRect.top - containerRect.top;
+        // Calculate canvas offset within its parent container
+        const offsetX = canvasRect.left - pdfViewerRect.left;
+        const offsetY = canvasRect.top - pdfViewerRect.top;
 
-    // Set hotspot container dimensions to match canvas exactly
-    hotspotContainer.style.width = `${canvasRect.width}px`;
-    hotspotContainer.style.height = `${canvasRect.height}px`;
-    hotspotContainer.style.left = `${offsetX}px`;
-    hotspotContainer.style.top = `${offsetY}px`;
+        // Position and size the hotspot container to exactly match the canvas
+        hotspotContainer.style.width = `${canvasRect.width}px`;
+        hotspotContainer.style.height = `${canvasRect.height}px`;
+        hotspotContainer.style.left = `${offsetX}px`;
+        hotspotContainer.style.top = `${offsetY}px`;
 
-    // Create hotspot elements
-    pageConfig.hotspots.forEach((hotspot, index) => {
-        const hotspotEl = document.createElement('div');
-        hotspotEl.className = 'hotspot';
+        // Create hotspot elements
+        pageConfig.hotspots.forEach((hotspot) => {
+            const hotspotEl = document.createElement('div');
+            hotspotEl.className = 'hotspot';
 
-        // Calculate position and size based on percentage relative to canvas
-        const left = (hotspot.x / 100) * canvasRect.width;
-        const top = (hotspot.y / 100) * canvasRect.height;
-        const width = (hotspot.width / 100) * canvasRect.width;
-        const height = (hotspot.height / 100) * canvasRect.height;
+            // Calculate position and size based on percentage of rendered canvas size
+            const left = (hotspot.x / 100) * canvasRect.width;
+            const top = (hotspot.y / 100) * canvasRect.height;
+            const width = (hotspot.width / 100) * canvasRect.width;
+            const height = (hotspot.height / 100) * canvasRect.height;
 
-        hotspotEl.style.left = `${left}px`;
-        hotspotEl.style.top = `${top}px`;
-        hotspotEl.style.width = `${width}px`;
-        hotspotEl.style.height = `${height}px`;
+            hotspotEl.style.left = `${left}px`;
+            hotspotEl.style.top = `${top}px`;
+            hotspotEl.style.width = `${width}px`;
+            hotspotEl.style.height = `${height}px`;
 
-        // Add label
-        if (hotspot.label) {
-            const label = document.createElement('div');
-            label.className = 'hotspot-label';
-            label.textContent = hotspot.label;
-            hotspotEl.appendChild(label);
-        }
+            // Add label
+            if (hotspot.label) {
+                const label = document.createElement('div');
+                label.className = 'hotspot-label';
+                label.textContent = hotspot.label;
+                hotspotEl.appendChild(label);
+            }
 
-        // Add click event
-        hotspotEl.addEventListener('click', () => {
-            openModelViewer(hotspot);
+            // Add click event
+            hotspotEl.addEventListener('click', () => {
+                openModelViewer(hotspot);
+            });
+
+            hotspotContainer.appendChild(hotspotEl);
         });
-
-        hotspotContainer.appendChild(hotspotEl);
     });
 }
 
