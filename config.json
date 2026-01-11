@@ -41,7 +41,7 @@
           "label": "تراكيب الخليه",
           "title": "تراكيب الخليه",
           "description": "",
-          "model": "models/cell2"
+          "model": "models/cell2.glb"
         }
       ]
     }
