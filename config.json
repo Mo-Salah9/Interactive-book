@@ -11,7 +11,7 @@
           "label": "الخلية الحيوانية",
           "title": "الخلية الحيوانية",
           "description": "",
-          "model": "models/cell.glb"
+          "model": "models/cell.gltf"
         }
       ]
     },
