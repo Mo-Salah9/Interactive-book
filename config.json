@@ -12,7 +12,7 @@
           "title": "الخلية الحيوانية",
           "description": "",
           "model": "models/cell.glb",
-          "scale": "1000 1000 1000"
+          "scale": "10 10 10"
         }
       ]
     },
